@@ -2,8 +2,16 @@ const express = require("express");
 const router = express.Router();
 const House = require("../models/houseModel.js");
 const User = require("../models/userModel.js"); // User model import so can update users houseID
+const Memo = require("../models/memosModel.js");
+const Bill = require("../models/billTrackerModel.js");
+///const TodoList = require("../models/todolistModel.js");
+
  const authorise = require("../middleware/authorisationMiddleware.js");
  const generateToken = require("../utils/generateToken.js");
+
+ //route to show all tentents in a house
+//add route to kick tenant 
+//delete route that imports all models and removes all aspects of a house
 
 //create new house
 router.post("/create", async (req, res) => {
@@ -29,7 +37,7 @@ router.get("/houses", authorise, async (req, res) => {
   }
 });
 
-//get house by Key
+//get house by houseID
 router.get("/:houseID", authorise, async (req, res) => {
   try {
     const house = await House.findOne({ key: req.params.houseID }); //finds house by key
@@ -40,13 +48,18 @@ router.get("/:houseID", authorise, async (req, res) => {
   }
 });
 
-// get a key for a house
+// get a key for a house add filrtr for role 
 router.get("/:houseID/key", authorise, async (req, res) => {  
   try{ 
+    const role = req.user.role;
     const house = await House.findOne({ houseID: req.params.houseID });
     if (!house) {
        return res.status(404).json({ message: "House not found" });
     }
+    if(role !== "landlord") {
+      return res.status(401).json({ message: "Not authorised, must be landlord" });
+    }
+
     res.json(house.key);
   } catch(error) {
     res.status(500).json({ error: error.message });
@@ -109,11 +122,35 @@ router.put("/:houseID/addTenant", authorise, async (req, res) => {
 
     //generate a new token with houseID 
     const token =  generateToken({userID, houseID: house.houseID});
-  
+   
     res.json({token});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+//route to remove a tenant 
+router.put("/:houseID/removeTenant", authorise, async (req, res) => {
+  try{
+    const userID = req.user.userID;
+    const role = req.user.role;
+    const house = await House.findOne({ houseID: req.params.houseID });
+    if (!house) { //if house not found
+      return res.status(404).json({ message: "House not found" });
+    }
+    if(role !== "landlord") { //if user is not a landlord
+      return res.status(401).json({ message: "Not authorised, must be landlord" });
+    }
+    if (!house.tenants.includes(userID)) { //if tenant not found
+      return res.status(400).json({ message: "Tenant not found" });
+    }
+    house.tenants = house.tenants.filter((tenant) => tenant !== userID); //remove tenant from house
+    await house.save();
+    res.json(house); 
+  } catch(error){
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;

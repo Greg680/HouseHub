@@ -7,6 +7,8 @@ const bcrypt = require("bcryptjs");
 const authorise = require("../middleware/authorisationMiddleware.js");
 const generateToken = require("../utils/generateToken.js");
 
+//create route for getting users role
+
 //route ro creating user
 router.post("/registration", async (req, res) => {
   try {
@@ -25,11 +27,11 @@ router.post("/registration", async (req, res) => {
     }); //creating instance of user
     await newUser.save(); //saving user to db
     res.status(201).json({
-      token: generateToken(newUser.userID, newUser.houseID), //sending token to client
+      token: generateToken(newUser.userID, newUser.houseID, newUser.role), //sending token to client
     }); //response for created user
     console.log("New user created: " + newUser); //logging if user created
     console.log(
-      "Token generated: " + generateToken(newUser.userID, newUser.houseID)
+      "Token generated: " + generateToken(newUser.userID, newUser.houseID, newUser.role)
     ); //logging if token generated
   } catch (error) {
     res.status(500).json({ error: error.message }); //response for error
@@ -107,10 +109,10 @@ router.post("/login", async (req, res) => {
     }
 
 	if(user.houseID == null){
-    res.json({ message: "RHP" }); //response for invalid credentials
+     return res.json({ message: "RHP" }); //response for invalid credentials
 	}
 
-    const token = generateToken(user.userID, user.houseID); //generating token
+    const token = generateToken(user.userID, user.houseID, user.role); //generating token
     res.json({token}); //send the user as a json response
 
   } catch (error) {
@@ -153,3 +155,4 @@ router.delete("/user/:username", async (req, res) => {
 });
 
 module.exports = router; //exporting the routes
+ 
