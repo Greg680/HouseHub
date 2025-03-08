@@ -68,7 +68,7 @@ const JoinHouseCard = ({ username, password }) => {
       console.log('House created:', response.data);
 
       const house = await axios.put(`http://localhost:5001/api/user/user/${username}`, {
-        houseID,
+        houseID: response.data.houseID,
       });
 
       const loginToken = await axios.post('http://localhost:5001/api/user/login', {
