@@ -28,6 +28,10 @@ const memoSchema = new mongoose.Schema({
         require : true,
         ref: 'User'
     },
+    createdDate: {
+        type: Date,
+        default: Date.now
+    }
  
 });
 

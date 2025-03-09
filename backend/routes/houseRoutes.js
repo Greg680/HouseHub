@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
+
+//model imports
 const House = require("../models/houseModel.js");
-const User = require("../models/userModel.js"); // User model import so can update users houseID
+const User = require("../models/userModel.js"); 
 const Memo = require("../models/memosModel.js");
 const Bill = require("../models/billTrackerModel.js");
-///const TodoList = require("../models/todolistModel.js");
+const TodoList = require("../models/todolistModel.js");
 
+//JWT's
  const authorise = require("../middleware/authorisationMiddleware.js");
  const generateToken = require("../utils/generateToken.js");
 
@@ -82,11 +85,19 @@ router.put("/update/:houseID", authorise, async (req, res) => {
   }
 });
 
-//delete house
+//delete house and all associated data
 router.delete("/delete/:houseID", authorise, async (req, res) => {
   try {
-    const house = await House.findOneAndDelete({ key: req.params.key }); // delete house by key
-    if (!house) return res.status(404).json({ message: "House not found" });
+    const houseID = req.params.houseID;
+
+    await Memo.deleteMany({ houseID }); // delete all memos by houseID
+    await Bill.deleteMany({ houseID }); // delete all bills by houseID
+    await TodoList.deleteMany({ houseID }); // delete all todo lists by houseID
+
+    const house = await House.findOneAndDelete({ houseID: req.params.houseID }); // delete house by key
+    if (!house) {
+        return res.status(404).json({ message: "House not found" });
+    }
     res.json(house);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -6,13 +6,12 @@ const authorise = require("../middleware/authorisationMiddleware.js");
 // Creating a route for new memo
 router.post("/memo", authorise, async (req, res) => {
   try {
-    const { memoID, title, content } = req.body;
+    const { title, content } = req.body;
     const newMemo = new Memo({
-      memoID,
       title,
       content,
       houseID: req.user.houseID,
-      username: req.user.username,
+      userID: req.user.userID,
     });
     await newMemo.save();
     res.status(201).json(newMemo);

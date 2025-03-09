@@ -13,10 +13,10 @@ const billTrackerRoutes = require('./routes/billTrackerRoutes');//importing file
 const todolistRoutes = require('./routes/todolistRoutes');//importing file  
 
 //Imported routes
-const memosRoutes = require('./routes/memosRoutes');
-const userRoutes = require('./routes/userRoutes');
-const houseRoutes = require('./routes/houseRoutes');
-const billTrackerRoutes = require('./routes/billTrackerRoutes');
+// const memosRoutes = require('./routes/memosRoutes');
+// const userRoutes = require('./routes/userRoutes');
+// const houseRoutes = require('./routes/houseRoutes');
+// const billTrackerRoutes = require('./routes/billTrackerRoutes');
 
 
 
