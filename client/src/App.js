@@ -6,6 +6,7 @@ import Landing from 'pages/landingPage';
 import LoginPage from 'pages/loginPage';
 import DashBoard from 'pages/mainDash';
 import AdminPage from 'pages/adminPage';
+import Redirect from 'pages/redirect';
 import axios from 'axios';
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Redirect />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/admin" element={<AdminPage />} />
