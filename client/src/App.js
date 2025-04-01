@@ -41,6 +41,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
+          {/* trying to resolve merge */}
           <Route path="/" element={<Redirect />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashBoard />} />
