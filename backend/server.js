@@ -1,4 +1,8 @@
-require('dotenv').config();
+try {
+  require('dotenv').config();
+} catch (error) {
+  console.error("Error loading .env file:", error);
+}
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
