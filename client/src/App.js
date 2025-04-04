@@ -21,7 +21,7 @@ function App() {
       if (!token) return;
 
       try {
-        const res = await axios.get('http://localhost:5001/api/user/user', {
+        const res = await axios.get('/api/user/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

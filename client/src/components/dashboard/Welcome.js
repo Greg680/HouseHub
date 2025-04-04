@@ -11,7 +11,7 @@ const WelcomeMessage = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5001/api/user/user",
+          "/api/user/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const WelcomeMessage = () => {
         alt="User Avatar"
         src={
           user?.profileImage
-            ? `http://localhost:5001/uploads/${user.profileImage}`
+            ? `/uploads/${user.profileImage}`
             : defaultLogo
         }
         sx={{ height: 80, width: 80 }}

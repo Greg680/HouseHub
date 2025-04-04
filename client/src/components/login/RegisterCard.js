@@ -36,7 +36,7 @@ const RegisterCard = ({ onToggle }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post('http://localhost:5001/api/user/registration', {
+			const response = await axios.post('/api/user/registration', {
 				username,
 				firstName,
 				lastName,

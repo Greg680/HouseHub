@@ -32,7 +32,7 @@ const AdminPage = ({ userTheme, setUserTheme }) => {
 			try {
 				const token = localStorage.getItem('token');
 				const response = await axios.get(
-					"http://localhost:5001/api/user/user",
+					"/api/user/user",
 					{
 						headers: {
 							Authorization: `Bearer ${token}`,

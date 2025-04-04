@@ -28,7 +28,7 @@ const MemoCard = () => {
 			try {
 				const token = localStorage.getItem("token");
 				const response = await axios.get(
-					"http://localhost:5001/api/memo/house/memos",
+					"/api/memo/house/memos",
 					{
 						headers: { Authorization: `Bearer ${token}` },
 					}
@@ -50,7 +50,7 @@ const MemoCard = () => {
 		try {
 			const token = localStorage.getItem("token");
 			const response = await axios.post(
-				"http://localhost:5001/api/memo/memo",
+				"/api/memo/memo",
 				newMemo,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -68,7 +68,7 @@ const MemoCard = () => {
 	const handleDelete = async (id) => {
 		try {
 			const token = localStorage.getItem("token");
-			await axios.delete(`http://localhost:5001/api/memo/memo/${id}`, {
+			await axios.delete(`/api/memo/memo/${id}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			setMemos(memos.filter((m) => m.memoID !== id));
@@ -93,7 +93,7 @@ const MemoCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/memo/memo/${id}`,
+        `/api/memo/memo/${id}`,
         editingMemo,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -37,7 +37,7 @@ const UtilityCard = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5001/api/bills/house",
+          "/api/bills/house",
 
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -56,7 +56,7 @@ const UtilityCard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5001/api/bills/create",
+        "/api/bills/create",
         newBill,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -76,7 +76,7 @@ const UtilityCard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:5001/api/bills/pay/${billID}`,
+        `/api/bills/pay/${billID}`,
         { amountPaid: parseFloat(payment.amountPaid) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -95,7 +95,7 @@ const UtilityCard = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5001/api/user/users", {
+        const response = await axios.get("/api/user/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const users = response.data;
@@ -114,7 +114,7 @@ const UtilityCard = () => {
   const handleDeleteBill = async (billID) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5001/api/bills/delete/${billID}`, {
+      await axios.delete(`/api/bills/delete/${billID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBills(bills.filter((b) => b._id !== billID));

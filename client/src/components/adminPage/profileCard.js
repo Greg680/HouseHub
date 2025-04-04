@@ -25,7 +25,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://localhost:5001/api/user/user",
+          "/api/user/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
 
     try {
       await axios.put(
-        `http://localhost:5001/api/user/theme`,
+        `/api/user/theme`,
         { theme: newTheme },
         {
           headers: {
@@ -88,7 +88,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
       console.log("Uploading image:", selectedImage);
       const response = await axios.put(
         // Use the new endpoint
-        `http://localhost:5001/api/user/user/updateFields/${user.username}`,
+        `/api/user/user/updateFields/${user.username}`,
         formData, // Send only the fields being updated
         {
           headers: {
@@ -107,7 +107,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
 
         try {
           await axios.post(
-            `http://localhost:5001/api/user/user/uploadProfileImage/${user.userID}`,
+            `/api/user/user/uploadProfileImage/${user.userID}`,
             imageForm,
             {
               headers: {
@@ -174,7 +174,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
                     selectedImage
                       ? URL.createObjectURL(selectedImage)
                       : user.profileImage
-                      ? `http://localhost:5001/uploads/${user.profileImage}`
+                      ? `/uploads/${user.profileImage}`
                       : defaultLogo
                   }
                   sx={{ height: 80, width: 80, cursor: "pointer" }}
@@ -268,7 +268,7 @@ const ProfileCard = ({ userTheme, setUserTheme }) => {
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
                   : user.profileImage
-                  ? `http://localhost:5001/uploads/${user.profileImage}`
+                  ? `/uploads/${user.profileImage}`
                   : defaultLogo
               }
               sx={{ height: 80, width: 80, cursor: "pointer" }}

@@ -17,7 +17,7 @@ const LandlordCard = () => {
             const token = localStorage.getItem('token');
             try {
                 const houseResponse = await axios.get(
-                    "http://localhost:5001/api/house/house",
+                    "/api/house/house",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -34,12 +34,12 @@ const LandlordCard = () => {
                     return "No tenants in house";   
                 } else if (tenantIDs.length === 1) {
                     console.log('One tenant in house');
-                    let tempTenant = await axios.get(`http://localhost:5001/api/user/user/id/${tenantIDs[0]}`);
+                    let tempTenant = await axios.get(`/api/user/user/id/${tenantIDs[0]}`);
                     tenantInfo.push(tempTenant.data);
                     console.log('Tenant Info:', tenantInfo);
                 } else {    
                     for(let i = 0; i < tenantIDs.length; i++) {
-                        let tempTenant = await axios.get(`http://localhost:5001/api/user/user/id/${tenantIDs[i]}`);
+                        let tempTenant = await axios.get(`/api/user/user/id/${tenantIDs[i]}`);
                         tenantInfo.push(tempTenant.data);
                     }
                 }
@@ -58,7 +58,7 @@ const LandlordCard = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(
-                `http://localhost:5001/api/house/removeTenant/${tenantID}`,
+                `/api/house/removeTenant/${tenantID}`,
                 {},
                 {
                     headers: {
@@ -78,7 +78,7 @@ const LandlordCard = () => {
             const tk = localStorage.getItem('token');
 
             const userResponse = await axios.get(
-                `http://localhost:5001/api/user/user`,
+                `/api/user/user`,
                 {
                     headers: {
                         Authorization: `Bearer ${tk}`,
@@ -88,7 +88,7 @@ const LandlordCard = () => {
 
             const token = localStorage.getItem('token');
             await axios.delete(
-                `http://localhost:5001/api/house/delete/${house.houseID}`,
+                `/api/house/delete/${house.houseID}`,
                 {
                     headers: {
                         Authorization: `Bearer ${tk}`,
@@ -96,7 +96,7 @@ const LandlordCard = () => {
                 }
             );
             await axios.put(
-                `http://localhost:5001/api/user/user/${userResponse.data.user.username}`,
+                `/api/user/user/${userResponse.data.user.username}`,
                 { houseID: null },
                 {},
                 {

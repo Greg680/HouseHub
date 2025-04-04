@@ -25,7 +25,7 @@ const LoginCard = ({ onToggle }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post('http://localhost:5001/api/user/login', {
+			const response = await axios.post('/api/user/login', {
 				username,
 				password,
 			});

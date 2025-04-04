@@ -19,7 +19,7 @@ const ChatPage = () => {
     const token = localStorage.getItem('token');
     if (!token) return navigate('/login');
 
-    axios.get("http://localhost:5001/api/user/user", {
+    axios.get("/api/user/user", {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setUser(res.data.user);
@@ -33,7 +33,7 @@ const ChatPage = () => {
   useEffect(() => {
     if (!user) return;
 
-    const newSocket = io('http://localhost:5001', {
+    const newSocket = io('', {
       auth: { token: localStorage.getItem('token') }
     });
 

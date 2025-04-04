@@ -29,7 +29,7 @@ const ToDoCard = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5001/api/todolist/house",
+          "/api/todolist/house",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -51,7 +51,7 @@ const ToDoCard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5001/api/todolist/todolists",
+        "/api/todolist/todolists",
         newToDo,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +70,7 @@ const ToDoCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5001/api/todolist/todolist/${taskID}`,
+        `/api/todolist/todolist/${taskID}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -85,7 +85,7 @@ const ToDoCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/todolist/todolist/${taskID}`,
+        `/api/todolist/todolist/${taskID}`,
         { taskStatus: !currentStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -119,7 +119,7 @@ const ToDoCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/todolist/todolist/${taskID}`,
+        `/api/todolist/todolist/${taskID}`,
         editingToDo,
         {
           headers: { Authorization: `Bearer ${token}` },

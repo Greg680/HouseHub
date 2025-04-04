@@ -38,7 +38,7 @@ const RecurringTasksCard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:5001/api/scheduler/tasks",
+        "/api/scheduler/tasks",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -63,7 +63,7 @@ const RecurringTasksCard = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5001/api/user/users", {
+        const response = await axios.get("/api/user/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const users = response.data;
@@ -83,7 +83,7 @@ const RecurringTasksCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5001/api/scheduler/tasks/${taskID}/complete`,
+        `/api/scheduler/tasks/${taskID}/complete`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -124,7 +124,7 @@ const RecurringTasksCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/scheduler/tasks/${taskID}`,
+        `/api/scheduler/tasks/${taskID}`,
         editingTask,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -143,7 +143,7 @@ const RecurringTasksCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5001/api/scheduler/tasks/${taskID}`,
+        `/api/scheduler/tasks/${taskID}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -165,7 +165,7 @@ const RecurringTasksCard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5001/api/scheduler/tasks",
+        "/api/scheduler/tasks",
         newTask,
         {
           headers: { Authorization: `Bearer ${token}` },

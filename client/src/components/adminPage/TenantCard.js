@@ -17,7 +17,7 @@ const TenantCard = () => {
             const token = localStorage.getItem('token');
             try {
                 const houseResponse = await axios.get(
-                    "http://localhost:5001/api/house/house",
+                    "/api/house/house",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -34,12 +34,12 @@ const TenantCard = () => {
                     return "No tenants in house";   
                 } else if (tenantIDs.length === 1) {
                     console.log('One tenant in house');
-                    let tempTenant = await axios.get(`http://localhost:5001/api/user/user/id/${tenantIDs[0]}`);
+                    let tempTenant = await axios.get(`/api/user/user/id/${tenantIDs[0]}`);
                     tenantInfo.push(tempTenant.data);
                     console.log('Tenant Info:', tenantInfo);
                 } else {    
                     for(let i = 0; i < tenantIDs.length; i++) {
-                        let tempTenant = await axios.get(`http://localhost:5001/api/user/user/id/${tenantIDs[i]}`);
+                        let tempTenant = await axios.get(`/api/user/user/id/${tenantIDs[i]}`);
                         tenantInfo.push(tempTenant.data);
                     }
                 }
@@ -58,7 +58,7 @@ const TenantCard = () => {
         try {
             const token = localStorage.getItem('token');
             const userResponse = await axios.get(
-                `http://localhost:5001/api/user/user`,
+                `/api/user/user`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ const TenantCard = () => {
             console.log('User ID:', userID);
 
             await axios.put(
-                `http://localhost:5001/api/house/removeTenant/${userID}`,
+                `/api/house/removeTenant/${userID}`,
                 {},
                 {
                     headers: {
@@ -80,7 +80,7 @@ const TenantCard = () => {
             );
 
             await axios.put(
-                `http://localhost:5001/api/user/user/${userResponse.data.user.username}`,
+                `/api/user/user/${userResponse.data.user.username}`,
                 { houseID: null },
                 {},
                 {
