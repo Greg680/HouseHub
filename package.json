@@ -12,7 +12,9 @@
     "engines": {
       "node": "18.x"
     },
-    "dependencies": {},
+    "dependencies": {
+        "dotenv": "^16.3.1"
+    },
     "author": "",
     "license": "ISC"
   }
