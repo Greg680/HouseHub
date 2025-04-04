@@ -8,7 +8,7 @@ const socketIo = require('socket.io');
 
 //Mongoose connection
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://Admin:User@househubdb.8pvzl.mongodb.net/?retryWrites=true&w=majority&appName=HouseHubDB";
+const uri = process.env.MONGODB_URI;
 const memosRoutes = require('./routes/memosRoutes');//importing file
 const userRoutes = require('./routes/userRoutes');//importing file
 const houseRoutes = require('./routes/houseRoutes');//importing file
