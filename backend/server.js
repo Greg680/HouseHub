@@ -18,14 +18,6 @@ const todolistRoutes = require('./routes/todolistRoutes');//importing file
 const schedulerRoutes = require('./routes/schedulerRoutes');//importing file
 
 
-// //Imported routes
-// const memosRoutes = require('./routes/memosRoutes');
-// const userRoutes = require('./routes/userRoutes');
-// const houseRoutes = require('./routes/houseRoutes');
-// const billTrackerRoutes = require('./routes/billTrackerRoutes');
-
-
-
 const app = express();
 
 // Enable CORS
@@ -66,14 +58,13 @@ app.use('/api/bills', billTrackerRoutes);
 app.use('/api/todolist', todolistRoutes);
 
 app.use('/api/scheduler', schedulerRoutes);
- 
+
+// Catch-all route to serve the React app for non-API routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+});
 
 // Start the server
-
-//app.listen(PORT, () => {
-//   console.log(`Server is running on port http://localhost:${PORT}`);
-// });
-
 
 const server = http.createServer(app);
 setupSocket(server);
