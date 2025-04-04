@@ -10,7 +10,7 @@
       "postinstall": "npm run install-backend && npm run build"
     },
     "engines": {
-      "node": ">=14.0.0"
+      "node": "18.x"
     },
     "dependencies": {},
     "author": "",
