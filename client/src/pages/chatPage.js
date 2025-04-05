@@ -19,7 +19,7 @@ const ChatPage = () => {
     const token = localStorage.getItem('token');
     if (!token) return navigate('/login');
 
-    axios.get("/api/user/user", {
+    axios.get("http://localhost:5001/api/user/user", {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setUser(res.data.user);
@@ -33,7 +33,7 @@ const ChatPage = () => {
   useEffect(() => {
     if (!user) return;
 
-    const newSocket = io('', {
+    const newSocket = io('http://localhost:5001', {
       auth: { token: localStorage.getItem('token') }
     });
 
@@ -97,8 +97,18 @@ const ChatPage = () => {
      <>
   <TheMainNavBar />
   <Container sx={{w:20, display: "flex", justifyContent: "center", alignContent: "center", mt: 5 }}>
+    <Box sx={{ mt: 4, px: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/dashboard')}
+                sx={{ mb: 3, alignSelf: 'flex-start' }}
+              >
+                Back to Dashboard
+              </Button>
+              </Box>
     <Card sx={{width: "75%",
-  height: "85vh", // Reduced height by 5%
+  height: "90vh",
   display: "flex",
   flexDirection: "column"}}>
       <Box sx={{  color: 'white', padding: 2 }}>
@@ -130,7 +140,7 @@ const ChatPage = () => {
               </Box>
             )}
             <Box sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{msg.message}</Box>
-            <Typography variant="caption" sx={{ color: 'black', display: 'block', textAlign: 'right' }}>
+            <Typography variant="caption" sx={{ color: '', display: 'block', textAlign: 'right' }}>
               {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Typography>
           </Box>
