@@ -2,6 +2,7 @@ require("dotenv").config(); //importing dotenv to use environment variables
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel.js");
+const House = require("../models/houseModel.js"); // Add this import to access the House model
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const authorise = require("../middleware/authorisationMiddleware.js");
@@ -134,7 +135,7 @@ router.post("/login", async (req, res) => {
 router.put("/user/:username", async (req, res) => {
   try {
     const { houseID } = req.body; // Only updating houseID
-    const houseExists = await User.findOne({ houseID }); // Check if the houseID exists
+    const houseExists = await House.findOne({ houseID }); // Validate against the House collection
     if (!houseExists) {
       return res.status(400).json({ message: "Invalid houseID" }); // Respond if houseID does not exist
     }
