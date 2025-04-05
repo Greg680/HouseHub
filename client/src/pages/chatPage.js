@@ -14,6 +14,11 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
+  // Refresh page on component mount
+  useEffect(() => {
+    window.location.reload();
+  }, []);
+
   // Auth & user data
   useEffect(() => {
     const token = localStorage.getItem('token');
