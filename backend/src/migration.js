@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const Bill = require("../models/billTrackerModel");
 const User = require("../models/userModel");
+require('dotenv').config();
+const uri = process.env.MONGODB_URI;
 
 const migrateUserIDs = async () => {
   try {
-    await mongoose.connect("mongodb+srv://Admin:User@househubdb.8pvzl.mongodb.net/?retryWrites=true&w=majority&appName=HouseHubDB");
+    await mongoose.connect(uri);
 
     const bills = await Bill.find();
     for (const bill of bills) {
