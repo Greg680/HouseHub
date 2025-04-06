@@ -11,15 +11,17 @@ const ChatPage = () => {
   const [socket, setSocket] = useState(null);
   const [typingUsers, setTypingUsers] = useState([]);
   const [user, setUser] = useState(null);
+  const [hasReloaded, setHasReloaded] = useState(false); // Track if the page has reloaded
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
   // Refresh page on component mount
   useEffect(() => {
-    if (window.location.pathname === '/chat') {
+    if (window.location.pathname === '/chat' && !hasReloaded) {
+      setHasReloaded(true); // Mark as reloaded
       navigate(0);
     }
-  }, [navigate]);
+  }, [navigate, hasReloaded]);
 
   // Auth & user data
   useEffect(() => {
