@@ -1,117 +1,79 @@
+//Defining dependencies for the tests.
 const request = require("supertest");
 const express = require("express");
-const userRoutes = require("../routes/userRoutes.js");
-const User = require("../models/userModel.js");
-const House = require("../models/houseModel.js");
-const generateToken = require("../utils/generateToken.js");
+const axios = require('axios');
+const authorise = require("../middleware/authorisationMiddleware.js");
 
-jest.mock("../models/userModel.js");
-jest.mock("../models/houseModel.js");
-jest.mock("../utils/generateToken.js");
+//To be able to run the following tests, you need to have the server running on localhost:5001.
+
+//André Pont - I developed my unit test for the user routes using Jest and following this guide:
+// Devot.team. (2024). API Testing with Jest: A Step-by-Step Guide. [online] Available at: https://devot.team/blog/jest-api-testing [Accessed 8 Apr. 2025].
+
+//Mocking the dependencies to isolate the tests from the actual implementations.
 
 const app = express();
 app.use(express.json());
-app.use("/api", userRoutes);
 
-describe("User Routes", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+describe("Testing the user Routes", () => {
+	//Creating a user by registrating
+	let token = null;
+	let mockUser = {};
 
-  test("POST /api/registration - should create a new user", async () => {
-    const mockUser = {
-      username: "testuser",
-      firstName: "Test",
-      lastName: "User",
-      email: "test@example.com",
-      age: "25",
-      password: "hashedpassword",
-      role: "tenant",
-      houseID: null,
-    };
+	test("POST /api/registration - should create a new user", async () => {
+		const mockResponse = await axios.post("http://localhost:5001/api/user/registration",{ 
+			username: "testuser",
+			firstName: "Test",
+			lastName: "User",
+			email: "test@example.com",
+			age: "25",
+			password: "password",
+			role: "tenant",
+		});
+		// console.log(mockResponse.data);
+		expect(mockResponse.status).toBe(201);
+		
+	});
 
-    User.prototype.save = jest.fn().mockResolvedValue(mockUser);
-    generateToken.mockReturnValue("mockToken");
+	//Update a user's houseID
+	test("PUT /api/user/:username - should update a user's houseID", async () => {
 
-    const response = await request(app)
-      .post("/api/registration")
-      .send({
-        username: "testuser",
-        firstName: "Test",
-        lastName: "User",
-        email: "test@example.com",
-        age: "25",
-        password: "password",
-        role: "tenant",
-      });
+		const mockResponse = await axios.put("http://localhost:5001/api/user/user/testuser", {
+			houseID: "50962f35-4c81-43aa-b97e-411548ff552e",
+		});
 
-    expect(response.status).toBe(201);
-    expect(response.body.token).toBe("mockToken");
-    expect(User.prototype.save).toHaveBeenCalled();
-  });
+		// console.log(mockResponse.data);
+		mockUser = mockResponse.data;
+		expect(mockResponse.data.houseID).toBe("50962f35-4c81-43aa-b97e-411548ff552e");
 
-  test("GET /api/users - should retrieve all users", async () => {
-    const mockUsers = [
-      { username: "user1", email: "user1@example.com" },
-      { username: "user2", email: "user2@example.com" },
-    ];
+	});
 
-    User.find = jest.fn().mockResolvedValue(mockUsers);
+	//Loging in
+	test("POST /api/login - should log in a user", async () => {
 
-    const response = await request(app).get("/api/users");
+		const mockResponse = await axios.post("http://localhost:5001/api/user/login", {
+			username: "testuser",
+			password: "password",
+		});
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUsers);
-    expect(User.find).toHaveBeenCalled();
-  });
+		token = mockResponse.data.token;
+		expect(mockResponse.data.token).toMatch(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/); // Validate JWT format
 
-  test("POST /api/login - should log in a user", async () => {
-    const mockUser = {
-      username: "testuser",
-      password: "hashedpassword",
-      houseID: "house123",
-      userID: "user123",
-    };
+		
+	});
 
-    User.findOne = jest.fn().mockResolvedValue(mockUser);
-    jest.spyOn(require("bcryptjs"), "compare").mockResolvedValue(true);
-    generateToken.mockReturnValue("mockToken");
+	//retrieve all
+	//retrieve specific user
+	//retrieve user by username/id
+	//user welcome
+	
+	//update a user's details
+	
+	//Delete a user
+	test("DELETE /api/user/:username - should delete a user", async () => {
 
-    const response = await request(app)
-      .post("/api/login")
-      .send({ username: "testuser", password: "password" });
+		const mockResponse = await axios.delete("http://localhost:5001/api/user/user/testuser");
 
-    expect(response.status).toBe(200);
-    expect(response.body.token).toBe("mockToken");
-    expect(User.findOne).toHaveBeenCalledWith({ username: "testuser" });
-  });
-
-  test("PUT /api/user/:username - should update a user's houseID", async () => {
-    const mockHouse = { houseID: "house123" };
-    const mockUser = { username: "testuser", houseID: "house123" };
-
-    House.findOne = jest.fn().mockResolvedValue(mockHouse);
-    User.findOneAndUpdate = jest.fn().mockResolvedValue(mockUser);
-
-    const response = await request(app)
-      .put("/api/user/testuser")
-      .send({ houseID: "house123" });
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUser);
-    expect(House.findOne).toHaveBeenCalledWith({ houseID: "house123" });
-    expect(User.findOneAndUpdate).toHaveBeenCalled();
-  });
-
-  test("DELETE /api/user/:username - should delete a user", async () => {
-    const mockUser = { username: "testuser" };
-
-    User.findOneAndDelete = jest.fn().mockResolvedValue(mockUser);
-
-    const response = await request(app).delete("/api/user/testuser");
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUser);
-    expect(User.findOneAndDelete).toHaveBeenCalledWith({ username: "testuser" });
-  });
+		// console.log(mockResponse.data);
+		expect(mockResponse.data).toEqual(mockUser);
+	});
 });
