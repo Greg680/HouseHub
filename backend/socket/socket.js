@@ -11,7 +11,7 @@ function setupSocket(server) {
         }
     });
 
-    // Middleware for authentication
+    // Middleware for authentication h
     io.use(socketAuthorise);
 
     //Handeling incoming connections
@@ -33,7 +33,7 @@ function setupSocket(server) {
             // Notify others of join
             socket.to(houseID).emit('userJoined', {
                 userID: socket.user.userID,
-                message: `${socket.user.username} has joined the chat`,
+                message: `${socket.user.username} has joined the chatt`,
             });
         }
 
