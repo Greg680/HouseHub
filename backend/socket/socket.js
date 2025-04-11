@@ -67,6 +67,10 @@ function setupSocket(server) {
 
         //Sending a message
         socket.on('sendMessage', async (messageData) => {
+            if (!messageData || !messageData.message || messageData.message.trim() === "") {
+                // Emit an error event for invalid message data
+                return socket.emit("error", "Invalid message data");
+            }
             try {
                 console.log('Message data:', messageData); // Log the message data for debugging
                 const { message } = messageData;
