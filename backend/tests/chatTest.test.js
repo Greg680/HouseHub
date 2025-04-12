@@ -30,7 +30,7 @@ describe("Socket.IO Chat Functionality Test", () => {
 
     // Create an HTTP server and Socket.IO server
     httpServer = createServer();
-    ioServer = setupSocket(httpServer); // Use the setupSocket function
+    ioServer = setupSocket(httpServer); 
     
     // Start server and connect client
     await new Promise((resolve) => {
