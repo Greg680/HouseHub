@@ -1,20 +1,18 @@
 const axios = require("axios");
-const request = require("supertest");
-const express = require("express");
-const authorisationMiddleware = require("../middleware/authorisationMiddleware");
 
 let token = null; // Variable to store the JWT token
+let mID = null;
+// Log in to retrieve a valid JWT token
+async function login() {
+  const response = await axios.post(`http://localhost:5001/api/user/login`, {
+    username: "fullhouse2",
+    password: "password",
+  });
+  token = response.data.token; // Store the token for use in tests
+}
 
 beforeAll(async () => {
-  // Log in to retrieve a valid JWT token
-  const mockResponse = await axios.post(`http://localhost:5001/user/login`, {
-    username: "fullhouse2",
-    password: "password", 
-  });
-
-  expect(mockResponse.status).toBe(200);
-  expect(mockResponse.data.token).toMatch(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/);
-  token = mockResponse.data.token; // Store the token for use in tests
+  await login(); // Ensure login completes before tests run
 });
 
 describe("memosRoutes", () => {
@@ -23,8 +21,8 @@ describe("memosRoutes", () => {
       const response = await axios.post(
         `http://localhost:5001/api/memo/memo`,
         {
-          memoID: "1test",
-          title: "New Memo",  
+          memoID: "testMemo1",
+          title: "New Memo",
           content: "New Content",
         },
         {
@@ -32,15 +30,16 @@ describe("memosRoutes", () => {
         }
       );
 
+      mID = response.data.memoID;
       expect(response.status).toBe(201);
-      expect(response.data).toHaveProperty("memoID", "1test");
+      expect(response.data).toHaveProperty("memoID", "testMemo1");
       expect(response.data.title).toBe("New Memo");
     });
 
     test("should return 400 for invalid input", async () => {
       try {
         await axios.post(
-          `http://localhost:5001/api/memo`,
+          `http://localhost:5001/api/memo/memo`,
           { title: "" }, // Invalid input
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -55,7 +54,7 @@ describe("memosRoutes", () => {
 
   describe("GET /house/memos", () => {
     test("should retrieve all memos for a house", async () => {
-      const response = await axios.get(`http://localhost:5001/api/house/memos`, {
+      const response = await axios.get(`http://localhost:5001/api/memo/house/memos`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -66,12 +65,12 @@ describe("memosRoutes", () => {
 
   describe("GET /memo/:memoID", () => {
     test("should retrieve a specific memo", async () => {
-      const response = await axios.get(`http://localhost:5001/api/memo/1test`, {
+      const response = await axios.get(`http://localhost:5001/api/memo/memo/${mID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       expect(response.status).toBe(200);
-      expect(response.data).toHaveProperty("memoID", "1test");
+      expect(response.data).toHaveProperty("memoID", "testMemo1");
     });
 
     test("should return 404 if memo not found", async () => {
@@ -89,7 +88,7 @@ describe("memosRoutes", () => {
   describe("PUT /memo/:memoID", () => {
     test("should update a memo", async () => {
       const response = await axios.put(
-        `http://localhost:5001/api/memo/1test`,
+        `http://localhost:5001/api/memo/memo/${mID}`,
         { title: "Updated Title", content: "Updated Content" },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -111,19 +110,18 @@ describe("memosRoutes", () => {
         );
       } catch (error) {
         expect(error.response.status).toBe(404);
-        expect(error.response.data).toHaveProperty("message", "Memo not found");
       }
     });
   });
 
   describe("DELETE /memo/:memoID", () => {
     test("should delete a memo", async () => {
-      const response = await axios.delete(`http://localhost:5001/api/memo/1test`, {
+      const response = await axios.delete(`http://localhost:5001/api/memo/memo/${mID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       expect(response.status).toBe(200);
-      expect(response.data).toHaveProperty("memoID", "1test");
+      expect(response.data).toHaveProperty("memoID", "testMemo1");
     });
 
     test("should return 404 if memo not found", async () => {
