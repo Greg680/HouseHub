@@ -2,6 +2,7 @@ const axios = require("axios");
 
 let token = null; // Variable to store the JWT token
 let mID = null;
+// to run these tests make sure you are in the backend folder and run npm start, then in another terimal run npx jest memosRoutes.test.js
 // Log in to retrieve a valid JWT token
 async function login() {
   const response = await axios.post(`http://localhost:5001/api/user/login`, {
@@ -17,7 +18,7 @@ beforeAll(async () => {
 
 describe("memosRoutes", () => {
   describe("POST /memo", () => {
-    test("should create a new memo", async () => {
+    test("should create a new memo", async () => { // testing create route
       const response = await axios.post(
         `http://localhost:5001/api/memo/memo`,
         {
@@ -126,7 +127,7 @@ describe("memosRoutes", () => {
 
     test("should return 404 if memo not found", async () => {
       try {
-        await axios.delete(`http://localhost:5001/api/memo/nonexistent`, {
+        await axios.delete(`http://localhost:5001/api/memo/memo/nonexistent`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
